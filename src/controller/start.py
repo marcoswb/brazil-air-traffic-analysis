@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
+from src.components_ui.dialogs import Dialogs
 from src.controller.base_controller import BaseController
 from src.utils.functions import (
     get_env

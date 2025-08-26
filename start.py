@@ -16,7 +16,7 @@ class MainWindow(QMainWindow):
         self.__controller = StartController()
         self.__controller.progress.connect(self.progress)
         self.__controller.error.connect(self.error)
-        Dialogs.parent = self
+        Dialogs.setup(self)
 
         self.ui.button_buscar_dados_anac.clicked.connect(self.search_data_anac)
 
@@ -47,6 +47,7 @@ class MainWindow(QMainWindow):
     def error(self, result):
         if result:
             self.ui.textedit_infos.append(f'ERRO: {result}')
+
         Dialogs.error('Erro ao realizar processo!')
 
     def run_function(self, func,  *args, callback=None, **kwargs):
