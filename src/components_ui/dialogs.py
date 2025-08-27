@@ -31,12 +31,18 @@ class Dialogs(QObject):
         loop.exec()
 
     @classmethod
-    def error(cls, message):
-        QMessageBox.information(cls.parent, 'Erro', message)
+    def error(cls, message, title='Error'):
+        if cls._instance is None:
+            raise RuntimeError('MessageDialog não foi inicializado. Chame setup().')
+
+        loop = QEventLoop()
+        cls._instance._event_loop = loop
+        cls._instance.request_message.emit('error', title, message)
+        loop.exec()
 
     @Slot(str, str, str)
     def _show_dialog(self, tipo, title, text):
-        if tipo == 'info':
+        if tipo in ('info', 'error'):
             QMessageBox.information(self._parent, title, text)
             self._response = True
         self._event_loop.quit()

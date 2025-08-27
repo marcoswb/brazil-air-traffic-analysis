@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-from src.components_ui.dialogs import Dialogs
+import src.utils.shared as shared
 from src.controller.base_controller import BaseController
 from src.utils.functions import (
     get_env
@@ -22,7 +22,7 @@ class StartController(BaseController):
             result = []
 
             self.update_progress(f"Consultando dados site: '{self.__base_url_anac}'")
-            response = requests.get(f'{self.__base_url_anac}/diversos/vra/')
+            response = requests.get(f'{self.__base_url_anac}/siros/registros/diversos/vra/')
             if response.status_code == 200:
                 soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -38,3 +38,38 @@ class StartController(BaseController):
             return result
         except Exception as error:
             self.raise_error(error)
+
+    def download_data_anac(self, years: list):
+        """
+        Baixa os dados dos anos informados
+        """
+        try:
+            downloaded_files = 0
+            for year in years:
+                self.update_progress(f"Consultando dados do ano de {year}")
+
+                response = requests.get(f'{self.__base_url_anac}/siros/registros/diversos/vra/{year}')
+                if response.status_code == 200:
+                    soup = BeautifulSoup(response.text, 'html.parser')
+
+                    links = [a['href'] for a in soup.find_all('a', href=True)]
+                    for link in links:
+                        if not link.lower().endswith('.csv'):
+                            continue
+
+                        full_link = f'{self.__base_url_anac}{link}'
+                        name_file = link.split('/')[-1]
+                        self._download_file(full_link, name_file)
+                        downloaded_files += 1
+
+            self.update_progress(f'Total de {downloaded_files} arquivos baixados!')
+        except Exception as error:
+            self.raise_error(error)
+
+    def _download_file(self, link, name_file):
+        self.update_progress(f'Baixando arquivo {name_file}')
+
+        response = requests.get(link)
+        if response.status_code == 200:
+            with open(f'{shared.path_data}\\{name_file}', 'wb') as output_file:
+                output_file.write(response.content)

@@ -1,14 +1,22 @@
+import os
 import sys
 from PySide6.QtWidgets import QApplication, QMainWindow
 
+import src.utils.shared as shared
 from src.ui.start import Ui_MainWindow
 from src.components_ui.dialogs import Dialogs
 from src.controller.start import StartController
 from src.decorators.thread_runner import ThreadRunner
+from src.utils.functions import (
+    create_dirs
+)
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        shared.path_data = f'{os.getcwd()}\\dados'
+        create_dirs(shared.path_data)
+
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
@@ -37,7 +45,10 @@ class MainWindow(QMainWindow):
             Dialogs.info('Não foi encontrado nenhum ano para pesquisa!')
             return
 
-        print(years)
+        self.run_function(
+            self.__controller.download_data_anac,
+            years
+        )
 
     def progress(self, result):
         if result:
