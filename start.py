@@ -7,6 +7,7 @@ from src.ui.start import Ui_MainWindow
 from src.components_ui.dialogs import Dialogs
 from src.controller.start import StartController
 from src.decorators.thread_runner import ThreadRunner
+from src.windows.dialog_select_years import DialogSelectYears
 from src.utils.functions import (
     create_dirs
 )
@@ -45,15 +46,29 @@ class MainWindow(QMainWindow):
             Dialogs.info('Não foi encontrado nenhum ano para pesquisa!')
             return
 
-        self.run_function(
-            self.__controller.download_data_anac,
-            years
-        )
+        dialog = DialogSelectYears(years, parent=self.ui.centralwidget)
+        if dialog.exec():
+            selected_years = dialog.get_selected_years()
+
+            if not selected_years:
+                Dialogs.info('Não foi selecionado nenhum ano para download!')
+                return
+
+            self.run_function(
+                self.__controller.download_data_anac,
+                selected_years
+            )
+        else:
+            self.set_message('Processo encerrado!')
 
     def progress(self, result):
         if result:
             self.ui.progressbar_status.setValue(int(result[0]))
             self.ui.textedit_infos.append(result[1])
+
+
+    def set_message(self, message):
+        self.ui.textedit_infos.append(message)
 
     def error(self, result):
         if result:

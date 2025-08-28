@@ -1,10 +1,13 @@
+import os.path
+
 import requests
 from bs4 import BeautifulSoup
 
 import src.utils.shared as shared
 from src.controller.base_controller import BaseController
 from src.utils.functions import (
-    get_env
+    get_env,
+    clean_path
 )
 
 
@@ -44,6 +47,9 @@ class StartController(BaseController):
         Baixa os dados dos anos informados
         """
         try:
+            self.update_progress(f"Anos a baixar: {years}")
+            clean_path(shared.path_data)
+
             downloaded_files = 0
             for year in years:
                 self.update_progress(f"Consultando dados do ano de {year}")
@@ -59,8 +65,8 @@ class StartController(BaseController):
 
                         full_link = f'{self.__base_url_anac}{link}'
                         name_file = link.split('/')[-1]
-                        self._download_file(full_link, name_file)
-                        downloaded_files += 1
+                        if self._download_file(full_link, name_file):
+                            downloaded_files += 1
 
             self.update_progress(f'Total de {downloaded_files} arquivos baixados!')
         except Exception as error:
@@ -73,3 +79,9 @@ class StartController(BaseController):
         if response.status_code == 200:
             with open(f'{shared.path_data}\\{name_file}', 'wb') as output_file:
                 output_file.write(response.content)
+
+        if not os.path.exists(f'{shared.path_data}\\{name_file}'):
+            self.update_progress(f'Falha ao baixar arquivo {name_file}')
+            return False
+        else:
+            return True
