@@ -16,6 +16,11 @@ class StartController(BaseController):
     def __init__(self):
         super().__init__()
         self.__base_url_anac = get_env('ANAC_RESOURCE')
+        self.__other_files_download = [
+            '/siros/registros/aerodromo/aerodromos.csv',
+            '/siros/registros/aeronave/aeronaves.csv',
+            '/siros/registros/cia/cias.csv'
+        ]
 
     def search_periods_anac(self):
         """
@@ -67,6 +72,12 @@ class StartController(BaseController):
                         name_file = link.split('/')[-1]
                         if self._download_file(full_link, name_file):
                             downloaded_files += 1
+
+            for link in self.__other_files_download:
+                full_link = f'{self.__base_url_anac}{link}'
+                name_file = link.split('/')[-1]
+                if self._download_file(full_link, name_file):
+                    downloaded_files += 1
 
             self.update_progress(f'Total de {downloaded_files} arquivos baixados!')
         except Exception as error:
