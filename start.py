@@ -29,6 +29,7 @@ class MainWindow(QMainWindow):
 
         self.ui.button_search_data_anac.clicked.connect(self.search_data_anac)
         self.ui.button_normalize_data.clicked.connect(self.normalize_data)
+        self.ui.button_load_data.clicked.connect(self.load_data)
 
     def start(self):
         self.show()
@@ -65,6 +66,11 @@ class MainWindow(QMainWindow):
     def normalize_data(self):
         self.run_function(
             self.__controller.normalize_data
+        )
+
+    def load_data(self):
+        self.run_function(
+            self.__controller.load_data
         )
 
     def progress(self, result):

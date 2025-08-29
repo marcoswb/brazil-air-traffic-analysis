@@ -52,6 +52,11 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_3.addWidget(self.button_normalize_data)
 
+        self.button_load_data = QPushButton(self.frame_1_1)
+        self.button_load_data.setObjectName(u"button_load_data")
+
+        self.verticalLayout_3.addWidget(self.button_load_data)
+
         self.line = QFrame(self.frame_1_1)
         self.line.setObjectName(u"line")
         self.line.setFrameShape(QFrame.Shape.VLine)
@@ -104,5 +109,6 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.button_search_data_anac.setText(QCoreApplication.translate("MainWindow", u"Buscar dados ANAC", None))
         self.button_normalize_data.setText(QCoreApplication.translate("MainWindow", u"Normalizar dados", None))
+        self.button_load_data.setText(QCoreApplication.translate("MainWindow", u"Carregar dados DB", None))
     # retranslateUi
 

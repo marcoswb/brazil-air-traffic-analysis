@@ -115,6 +115,16 @@ class StartController(BaseController):
         except Exception as error:
             self.raise_error(error)
 
+    def load_data(self):
+        try:
+            self._set_work_path(f'{shared.path_data}\\normalized')
+            create_dirs(self.__work_path)
+            clean_path(self.__work_path)
+
+            self.update_progress(f'Processo finalizado!')
+        except Exception as error:
+            self.raise_error(error)
+
     def _download_file(self, link, name_file):
         self.update_progress(f'Baixando arquivo {name_file}')
 

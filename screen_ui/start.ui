@@ -60,6 +60,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="button_load_data">
+            <property name="text">
+             <string>Carregar dados DB</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="Line" name="line">
             <property name="orientation">
              <enum>Qt::Orientation::Vertical</enum>
