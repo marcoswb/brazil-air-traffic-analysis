@@ -42,10 +42,15 @@ class Ui_MainWindow(object):
         self.frame_1_1.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout_3 = QVBoxLayout(self.frame_1_1)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.button_buscar_dados_anac = QPushButton(self.frame_1_1)
-        self.button_buscar_dados_anac.setObjectName(u"button_buscar_dados_anac")
+        self.button_search_data_anac = QPushButton(self.frame_1_1)
+        self.button_search_data_anac.setObjectName(u"button_search_data_anac")
 
-        self.verticalLayout_3.addWidget(self.button_buscar_dados_anac)
+        self.verticalLayout_3.addWidget(self.button_search_data_anac)
+
+        self.button_normalize_data = QPushButton(self.frame_1_1)
+        self.button_normalize_data.setObjectName(u"button_normalize_data")
+
+        self.verticalLayout_3.addWidget(self.button_normalize_data)
 
         self.line = QFrame(self.frame_1_1)
         self.line.setObjectName(u"line")
@@ -97,6 +102,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.button_buscar_dados_anac.setText(QCoreApplication.translate("MainWindow", u"Buscar dados ANAC", None))
+        self.button_search_data_anac.setText(QCoreApplication.translate("MainWindow", u"Buscar dados ANAC", None))
+        self.button_normalize_data.setText(QCoreApplication.translate("MainWindow", u"Normalizar dados", None))
     # retranslateUi
 

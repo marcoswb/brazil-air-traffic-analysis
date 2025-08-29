@@ -15,7 +15,7 @@ from src.utils.functions import (
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        shared.path_data = f'{os.getcwd()}\\dados'
+        shared.path_data = f'{os.getcwd()}\\data'
         create_dirs(shared.path_data)
 
         self.ui = Ui_MainWindow()
@@ -27,7 +27,8 @@ class MainWindow(QMainWindow):
         self.__controller.error.connect(self.error)
         Dialogs.setup(self)
 
-        self.ui.button_buscar_dados_anac.clicked.connect(self.search_data_anac)
+        self.ui.button_search_data_anac.clicked.connect(self.search_data_anac)
+        self.ui.button_normalize_data.clicked.connect(self.normalize_data)
 
     def start(self):
         self.show()
@@ -60,6 +61,11 @@ class MainWindow(QMainWindow):
             )
         else:
             self.set_message('Processo encerrado!')
+
+    def normalize_data(self):
+        self.run_function(
+            self.__controller.normalize_data
+        )
 
     def progress(self, result):
         if result:

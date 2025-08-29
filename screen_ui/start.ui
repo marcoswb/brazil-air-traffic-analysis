@@ -46,9 +46,16 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <widget class="QPushButton" name="button_buscar_dados_anac">
+           <widget class="QPushButton" name="button_search_data_anac">
             <property name="text">
              <string>Buscar dados ANAC</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="button_normalize_data">
+            <property name="text">
+             <string>Normalizar dados</string>
             </property>
            </widget>
           </item>

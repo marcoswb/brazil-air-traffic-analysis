@@ -4,10 +4,12 @@ import requests
 from bs4 import BeautifulSoup
 
 import src.utils.shared as shared
+from src.controller.data_controller import DataController
 from src.controller.base_controller import BaseController
 from src.utils.functions import (
     get_env,
-    clean_path
+    clean_path,
+    create_dirs
 )
 
 
@@ -16,6 +18,7 @@ class StartController(BaseController):
     def __init__(self):
         super().__init__()
         self.__base_url_anac = get_env('ANAC_RESOURCE')
+        self.__work_path = ''
         self.__other_files_download = [
             '/siros/registros/aerodromo/aerodromos.csv',
             '/siros/registros/aeronave/aeronaves.csv',
@@ -52,8 +55,11 @@ class StartController(BaseController):
         Baixa os dados dos anos informados
         """
         try:
+            self._set_work_path(f'{shared.path_data}\\downloaded')
+            create_dirs(self.__work_path)
+            clean_path(self.__work_path)
+
             self.update_progress(f"Anos a baixar: {years}")
-            clean_path(shared.path_data)
 
             downloaded_files = 0
             for year in years:
@@ -80,6 +86,32 @@ class StartController(BaseController):
                     downloaded_files += 1
 
             self.update_progress(f'Total de {downloaded_files} arquivos baixados!')
+            self.update_progress(f'Processo finalizado!')
+        except Exception as error:
+            self.raise_error(error)
+
+    def normalize_data(self):
+        try:
+            self._set_work_path(f'{shared.path_data}\\normalized')
+            create_dirs(self.__work_path)
+            clean_path(self.__work_path)
+
+            others_files = [item.split('/')[-1] for item in self.__other_files_download]
+            for file in os.listdir(f'{shared.path_data}\\downloaded'):
+                self.update_progress(f'Normalizando arquivo {file}')
+
+                if file.startswith('VRA_'):
+                    DataController.normalize_flights_data(
+                        f'{shared.path_data}\\downloaded\\{file}',
+                        f'{shared.path_data}\\normalized\\flights.csv'
+                    )
+                elif file in others_files:
+                    DataController.normalize_csv(
+                        f'{shared.path_data}\\downloaded\\{file}',
+                        path_new_csv=f'{shared.path_data}\\normalized\\{file}'
+                    )
+
+            self.update_progress(f'Processo finalizado!')
         except Exception as error:
             self.raise_error(error)
 
@@ -88,11 +120,14 @@ class StartController(BaseController):
 
         response = requests.get(link)
         if response.status_code == 200:
-            with open(f'{shared.path_data}\\{name_file}', 'wb') as output_file:
+            with open(f'{self.__work_path}\\{name_file}', 'wb') as output_file:
                 output_file.write(response.content)
 
-        if not os.path.exists(f'{shared.path_data}\\{name_file}'):
+        if not os.path.exists(f'{self.__work_path}\\{name_file}'):
             self.update_progress(f'Falha ao baixar arquivo {name_file}')
             return False
         else:
             return True
+
+    def _set_work_path(self, path):
+        self.__work_path = str(path)
