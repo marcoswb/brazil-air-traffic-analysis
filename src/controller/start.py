@@ -5,8 +5,8 @@ from bs4 import BeautifulSoup
 
 import src.utils.shared as shared
 from src.controller.data_controller import DataController
-from src.controller.base_controller import BaseController
-from src.utils.functions import (
+from dags.controllers.base_controller import BaseController
+from dags.utils import (
     get_env,
     clean_path,
     create_dirs

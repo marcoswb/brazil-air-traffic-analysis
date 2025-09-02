@@ -8,7 +8,7 @@ from src.components_ui.dialogs import Dialogs
 from src.controller.start import StartController
 from src.decorators.thread_runner import ThreadRunner
 from src.windows.dialog_select_years import DialogSelectYears
-from src.utils.functions import (
+from dags.utils import (
     create_dirs
 )
 

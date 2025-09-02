@@ -1,6 +1,6 @@
 import psycopg2
 
-from src.utils.functions import get_env
+from dags.utils import get_env
 
 
 class Postgres:
