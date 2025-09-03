@@ -35,5 +35,4 @@ with DAG(
         provide_context=True
     )
 
-    download_task
-    # download_task >> normalize_task
+    download_task >> normalize_task
