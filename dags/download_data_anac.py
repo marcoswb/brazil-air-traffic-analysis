@@ -16,7 +16,7 @@ default_args = {
 controller = DataController()
 
 with DAG(
-    'download_data_anac',
+    'download_and_normalize_data_anac',
     default_args=default_args,
     description='DAG para baixar dados da ANAC',
     catchup=False,
@@ -29,4 +29,11 @@ with DAG(
         provide_context=True
     )
 
+    normalize_task = PythonOperator(
+        task_id='normalize_data',
+        python_callable=controller.normalize_data,
+        provide_context=True
+    )
+
     download_task
+    # download_task >> normalize_task

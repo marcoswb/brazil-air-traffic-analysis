@@ -2,6 +2,7 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
+from controllers.CSVController import CSVController
 from controllers.base_controller import BaseController
 from utils.functions import (
     create_dirs,
@@ -27,7 +28,7 @@ class DataController(BaseController):
         """
         try:
             years = self.get_env('YEARS_TO_DOWNLOAD', default_value='2025').split(',')
-            self._set_work_path(f'{self.__base_path}\\downloaded')
+            self._set_work_path(f'{self.__base_path}/downloaded')
             create_dirs(self.__work_path)
             clean_path(self.__work_path)
 
@@ -62,15 +63,40 @@ class DataController(BaseController):
         except Exception as error:
             self.raise_error(error)
 
+    def normalize_data(self):
+        try:
+            self._set_work_path(f'{self.__base_path}/normalized')
+            create_dirs(self.__work_path)
+            clean_path(self.__work_path)
+
+            others_files = [item.split('/')[-1] for item in self.__other_files_download]
+            for file in os.listdir(f'{self.__base_path}/downloaded'):
+                self.update_progress(f'Normalizando arquivo {file}')
+
+                if file.startswith('VRA_'):
+                    CSVController.normalize_flights_data(
+                        f'{self.__base_path}/downloaded/{file}',
+                        f'{self.__base_path}/normalized/flights.csv'
+                    )
+                elif file in others_files:
+                    CSVController.normalize_csv(
+                        f'{self.__base_path}/downloaded/{file}',
+                        path_new_csv=f'{self.__base_path}/normalized/{file}'
+                    )
+
+            self.update_progress(f'Processo finalizado!')
+        except Exception as error:
+            self.raise_error(error)
+
     def _download_file(self, link, name_file):
         self.update_progress(f'Baixando arquivo {name_file}')
 
         response = requests.get(link)
         if response.status_code == 200:
-            with open(f'{self.__work_path}\\{name_file}', 'wb') as output_file:
+            with open(f'{self.__work_path}/{name_file}', 'wb') as output_file:
                 output_file.write(response.content)
 
-        if not os.path.exists(f'{self.__work_path}\\{name_file}'):
+        if not os.path.exists(f'{self.__work_path}/{name_file}'):
             self.update_progress(f'Falha ao baixar arquivo {name_file}')
             return False
         else:
