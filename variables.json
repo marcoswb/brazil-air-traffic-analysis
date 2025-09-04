@@ -1,5 +1,10 @@
 {
     "ANAC_RESOURCE": "https://siros.anac.gov.br",
     "BASE_PATH": "/opt/airflow/data/anac",
+    "DATABASE_DB": "airflow",
+    "HOST_DB": "db",
+    "PASSWORD_DB": "airflow",
+    "PORT_DB": 5432,
+    "USERNAME_DB": "airflow",
     "YEARS_TO_DOWNLOAD": 2025
 }
