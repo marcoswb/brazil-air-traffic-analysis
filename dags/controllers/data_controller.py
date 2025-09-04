@@ -2,7 +2,7 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
-from controllers.CSVController import CSVController
+from controllers.csv_controller import CSVController
 from controllers.base_controller import BaseController
 from utils.functions import (
     create_dirs,

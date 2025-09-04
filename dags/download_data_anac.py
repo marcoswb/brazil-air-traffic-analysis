@@ -1,27 +1,17 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-from datetime import timedelta
-
-from controllers.DataController import DataController
-
-default_args = {
-    'owner': 'airflow',
-    'depends_on_past': False,
-    'email_on_failure': False,
-    'email_on_retry': False,
-    'retries': 1,
-    'retry_delay': timedelta(minutes=5),
-}
-
-controller = DataController()
+from datetime import datetime
+from controllers.data_controller import DataController
 
 with DAG(
     'download_and_normalize_data_anac',
-    default_args=default_args,
-    description='DAG para baixar dados da ANAC',
+    description='DAG para baixar e normalizar dados da ANAC',
+    start_date=datetime(2024, 1, 1),
+    schedule=None,
     catchup=False,
     tags=['download'],
 ) as dag:
+    controller = DataController()
 
     download_task = PythonOperator(
         task_id='download_data_anac',
