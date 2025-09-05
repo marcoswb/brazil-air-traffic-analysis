@@ -23,5 +23,5 @@ class Flights(ModelBase):
 
     aircraft = relationship("Aircraft", back_populates="flights")
     airline = relationship("Airline", back_populates="flights")
-    departure_airport = relationship("Airport", back_populates="departure_flights")
-    arrival_airport = relationship("Airport", back_populates="arrival_flights")
+    departure_airport = relationship("Airport", back_populates="departure_flights", foreign_keys=[departure_airport_id])
+    arrival_airport = relationship("Airport", back_populates="arrival_flights", foreign_keys=[arrival_airport_id])

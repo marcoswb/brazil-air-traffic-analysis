@@ -17,7 +17,17 @@ class Airport(ModelBase):
     latitude = Column(Float)
     longitude = Column(Float)
 
-    departure_flights = relationship("Flights", back_populates="departure_airport", cascade="all, delete-orphan")
-    arrival_flights = relationship("Flights", back_populates="arrival_airport", cascade="all, delete-orphan")
+    departure_flights = relationship(
+        "Flights",
+        back_populates="departure_airport",
+        cascade="all, delete-orphan",
+        foreign_keys="Flights.departure_airport_id"
+    )
+    arrival_flights = relationship(
+        "Flights",
+        back_populates="arrival_airport",
+        cascade="all, delete-orphan",
+        foreign_keys="Flights.arrival_airport_id"
+    )
 
     __table_args__ = (Index('idx_lat_long', latitude, longitude),)
