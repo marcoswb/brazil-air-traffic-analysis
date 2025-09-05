@@ -14,8 +14,13 @@ with DAG(
     controller = LoadDataController()
 
     create_db_task = PythonOperator(
-        task_id='create_db_and_load_data',
+        task_id='create_db',
         python_callable=controller.create_tables,
     )
 
-    create_db_task
+    load_data_task = PythonOperator(
+        task_id='load_data',
+        python_callable=controller.load_data,
+    )
+
+    create_db_task >> load_data_task

@@ -11,3 +11,6 @@ class LoadDataController(BaseController):
     def create_tables(self):
         Base.metadata.create_all(bind=engine)
         self.update_progress('Tabelas criadas com sucesso!')
+
+    def load_data(self):
+        pass

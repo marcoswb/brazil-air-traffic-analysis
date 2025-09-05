@@ -69,16 +69,16 @@ class DataController(BaseController):
             create_dirs(self.__work_path)
             clean_path(self.__work_path)
 
-            others_files = [item.split('/')[-1] for item in self.__other_files_download]
+            name_files = [item.split('/')[-1] for item in self.__other_files_download]
             for file in os.listdir(f'{self.__base_path}/downloaded'):
                 self.update_progress(f'Normalizando arquivo {file}')
 
                 if file.startswith('VRA_'):
                     CSVController.normalize_flights_data(
                         f'{self.__base_path}/downloaded/{file}',
-                        f'{self.__base_path}/normalized/flights.csv'
+                        f'{self.__base_path}/normalized/voos.csv'
                     )
-                elif file in others_files:
+                elif file in name_files:
                     CSVController.normalize_csv(
                         f'{self.__base_path}/downloaded/{file}',
                         path_new_csv=f'{self.__base_path}/normalized/{file}'
