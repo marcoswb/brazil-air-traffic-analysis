@@ -14,9 +14,12 @@ class CSVController:
             normalized_columns.append(unidecode(str(column).replace(' ', '_')).lower())
 
         df.columns = normalized_columns
+        df = df.replace("NaN", "").replace("nan", "").fillna("")
+        df = df.replace({None: ""})
 
         if path_new_csv:
             df.to_csv(path_new_csv, sep=';', header=True, index=False)
+
 
         return df
 
