@@ -6,7 +6,7 @@ import os
 class CSVController:
 
     @classmethod
-    def normalize_csv(cls, path_csv, path_new_csv=None):
+    def normalize_csv(cls, path_csv):
         df = pd.read_csv(path_csv, delimiter=';')
 
         normalized_columns = []
@@ -16,10 +16,6 @@ class CSVController:
         df.columns = normalized_columns
         df = df.replace("NaN", "").replace("nan", "").fillna("")
         df = df.replace({None: ""})
-
-        if path_new_csv:
-            df.to_csv(path_new_csv, sep=';', header=True, index=False)
-
 
         return df
 
@@ -42,3 +38,19 @@ class CSVController:
             df.to_csv(path_new_csv, sep=';', mode='a', header=False, index=False)
         else:
             df.to_csv(path_new_csv, sep=';', header=True, index=False)
+
+    @staticmethod
+    def to_csv(df, path_csv):
+        df.to_csv(path_csv, sep=';', header=True, index=False)
+
+    @staticmethod
+    def format_float_columns(df, float_columns):
+        if float_columns:
+            df[float_columns] = df[float_columns].apply(lambda x: x.str.replace(',', '.', regex=False))
+
+        return df
+
+    @staticmethod
+    def replace_column_value(df, name_column, old_value, new_value):
+        df[name_column] = df[name_column].replace(old_value, new_value)
+        return df

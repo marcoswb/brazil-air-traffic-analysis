@@ -21,6 +21,9 @@ class DataController(BaseController):
             '/siros/registros/aeronave/aeronaves.csv',
             '/siros/registros/cia/cias.csv'
         ]
+        self.__float_columns = {
+            'aerodromos.csv': ['latitude', 'longitude']
+        }
 
     def download_data_anac(self):
         """
@@ -79,10 +82,21 @@ class DataController(BaseController):
                         f'{self.__base_path}/normalized/voos.csv'
                     )
                 elif file in name_files:
-                    CSVController.normalize_csv(
-                        f'{self.__base_path}/downloaded/{file}',
-                        path_new_csv=f'{self.__base_path}/normalized/{file}'
-                    )
+                    dataframe = CSVController.normalize_csv(f'{self.__base_path}/downloaded/{file}')
+
+                    float_columns = self.__float_columns.get(file)
+                    if float_columns:
+                        dataframe = CSVController.format_float_columns(dataframe, float_columns)
+
+                    if file == 'aerodromos.csv':
+                        dataframe = CSVController.replace_column_value(
+                            dataframe,
+                            'sigla_iata_aerodromo',
+                            '...',
+                            ''
+                        )
+
+                    CSVController.to_csv(dataframe, f'{self.__base_path}/normalized/{file}')
 
             self.update_progress(f'Processo finalizado!')
         except Exception as error:
