@@ -4,20 +4,20 @@ from datetime import datetime
 from controllers.data_controller import DataController
 
 with DAG(
-    'download_data_anac',
-    dag_display_name="1 - Download dados ANAC",
-    description='DAG para baixardados da ANAC',
+    'normalize_data_anac',
+    dag_display_name="2 - Normalizar dados ANAC",
+    description='DAG para normalizar dados da ANAC',
     start_date=datetime(2024, 1, 1),
     schedule=None,
     catchup=False,
-    tags=['download'],
+    tags=['normalize'],
 ) as dag:
     controller = DataController()
 
-    download_task = PythonOperator(
-        task_id='download_data_anac',
-        python_callable=controller.download_data_anac,
+    normalize_task = PythonOperator(
+        task_id='normalize_data',
+        python_callable=controller.normalize_data,
         provide_context=True
     )
 
-    download_task
+    normalize_task

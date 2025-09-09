@@ -5,6 +5,7 @@ from controllers.load_data_controller import LoadDataController
 
 with DAG(
     'create_db_and_load_data',
+    dag_display_name="3 - Carregar dados para o Banco de dados",
     description='DAG para criar banco de dados Postgres e carregar os dados normalizados',
     start_date=datetime(2024, 1, 1),
     schedule=None,
