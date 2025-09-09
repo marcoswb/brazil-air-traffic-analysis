@@ -8,11 +8,11 @@ class Airport(ModelBase):
     __tablename__ = 'airport'
 
     icao_code = Column(String(4), unique=True)
-    iata_code = Column(String(3), unique=True)
+    iata_code = Column(String(3))
     name = Column(String(100))
     municipality = Column(String(100))
     state = Column(String(2))
-    country = Column(String(20))
+    country = Column(String(50))
     critical_aircraft = Column(String(5))
     latitude = Column(Float)
     longitude = Column(Float)
