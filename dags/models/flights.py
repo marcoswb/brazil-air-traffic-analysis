@@ -16,10 +16,10 @@ class Flights(ModelBase):
     flight_status = Column(String(20))
     reference_date = Column(Date)
 
-    aircraft_id = Column(Integer, ForeignKey("aircraft.id"), nullable=False)
-    airline_id = Column(Integer, ForeignKey("airline.id"), nullable=False)
-    departure_airport_id = Column(Integer, ForeignKey("airport.id"), nullable=False)
-    arrival_airport_id = Column(Integer, ForeignKey("airport.id"), nullable=False)
+    aircraft_id = Column(Integer, ForeignKey("aircraft.id"))
+    airline_id = Column(Integer, ForeignKey("airline.id"))
+    departure_airport_id = Column(Integer, ForeignKey("airport.id"))
+    arrival_airport_id = Column(Integer, ForeignKey("airport.id"))
 
     aircraft = relationship("Aircraft", back_populates="flights")
     airline = relationship("Airline", back_populates="flights")

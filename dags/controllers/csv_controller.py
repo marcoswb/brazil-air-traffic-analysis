@@ -54,3 +54,9 @@ class CSVController:
     def replace_column_value(df, name_column, old_value, new_value):
         df[name_column] = df[name_column].replace(old_value, new_value)
         return df
+
+    @staticmethod
+    def format_timestamp_column(df, name_column):
+        df[name_column] = pd.to_datetime(df[name_column], format='%d/%m/%Y %H:%M', errors='coerce').replace({pd.NaT: None})
+        return df
+

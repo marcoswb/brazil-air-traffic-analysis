@@ -1,9 +1,8 @@
-from controllers.database import engine, Base
+import pandas as pd
 from models import *
-
 from controllers.csv_controller import CSVController
 from controllers.base_controller import BaseController
-from controllers.database import get_connection
+from controllers.database import engine, Base, get_connection, create_schema
 from models.aircraft import Aircraft
 from models.airline import Airline
 from models.airport import Airport
@@ -18,8 +17,9 @@ class LoadDataController(BaseController):
         self.__connection_db = get_connection()
 
     def create_tables(self):
+        create_schema()
         Base.metadata.create_all(bind=engine)
-        self.update_progress('Tabelas criadas com sucesso!')
+        self.update_progress('TABELAS CRIADAS COM SUCESSO!')
 
     def load_data(self):
         df = CSVController.normalize_csv(f'{self.__base_path}/normalized/aeronaves.csv')
@@ -61,11 +61,23 @@ class LoadDataController(BaseController):
             self._save_data(airport, 'airport', icao_code)
 
         self.__connection_db.commit()
-        print(self.__data_db)
+
+        self.update_progress('--------------------------------------------------------------------')
+        self.update_progress('REGISTROS AUXILIARES GRAVADOS')
+        self.update_progress(self.__data_db)
+        self.update_progress('--------------------------------------------------------------------')
 
         df = CSVController.normalize_csv(f'{self.__base_path}/normalized/voos.csv')
-        for row in df.itertuples():
+        df = CSVController.format_timestamp_column(df, 'partida_prevista')
+        df = CSVController.format_timestamp_column(df, 'partida_real')
+        df = CSVController.format_timestamp_column(df, 'chegada_prevista')
+        df = CSVController.format_timestamp_column(df, 'chegada_real')
+
+        total_records = len(df)
+        batch_size = 20000
+        for i, row in enumerate(df.itertuples(), start=1):
             flight_number = row.numero_voo
+
             flight = Flights(
                 flight_number=flight_number,
                 seat_capacity=row.numero_de_assentos,
@@ -80,10 +92,16 @@ class LoadDataController(BaseController):
                 departure_airport_id=self.__data_db.get(('airport', row.sigla_icao_aeroporto_origem)),
                 arrival_airport_id=self.__data_db.get(('airport', row.sigla_icao_aeroporto_destino)),
             )
-            self._save_data(flight, 'flight', flight_number)
+            self._save_data(flight, 'flight', None)
+
+            if i % batch_size == 0:
+                self.__connection_db.commit()
+                self.update_progress(f'REGISTROS INSERIDOS: {i}/{total_records}')
+
         self.__connection_db.commit()
 
     def _save_data(self, object_insert, table, key_search):
         self.__connection_db.add(object_insert)
-        self.__connection_db.flush()
-        self.__data_db[table, key_search] = object_insert.id
+        if key_search:
+            self.__connection_db.flush()
+            self.__data_db[table, key_search] = object_insert.id
