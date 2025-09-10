@@ -78,6 +78,35 @@ class LoadDataController(BaseController):
         for i, row in enumerate(df.itertuples(), start=1):
             flight_number = row.numero_voo
 
+            aircraft_id = self.__data_db.get(('aircraft', row.modelo_equipamento))
+            if not aircraft_id:
+                icao_code = row.modelo_equipamento
+                aircraft = Aircraft(icao_code=icao_code, model=f'Geral {icao_code}')
+                self._save_data(aircraft, 'aircraft', icao_code)
+                self.__connection_db.commit()
+
+
+            airline_id = self.__data_db.get(('airline', row.sigla_icao_empresa_aerea))
+            if not airline_id:
+                icao_code = row.sigla_icao_empresa_aerea
+                airline = Airline(icao_code=icao_code, name=f'Geral {icao_code}')
+                self._save_data(airline, 'airline', icao_code)
+                self.__connection_db.commit()
+
+            departure_airport_id = self.__data_db.get(('airport', row.sigla_icao_aeroporto_origem))
+            if not departure_airport_id:
+                icao_code = row.sigla_icao_aeroporto_origem
+                airport = Airport(icao_code=icao_code, name=f'Geral {icao_code}')
+                self._save_data(airport, 'airport', icao_code)
+                self.__connection_db.commit()
+
+            arrival_airport_id = self.__data_db.get(('airport', row.sigla_icao_aeroporto_destino))
+            if not arrival_airport_id:
+                icao_code = row.sigla_icao_aeroporto_destino
+                airport = Airport(icao_code=icao_code, name=f'Geral {icao_code}')
+                self._save_data(airport, 'airport', icao_code)
+                self.__connection_db.commit()
+
             flight = Flights(
                 flight_number=flight_number,
                 seat_capacity=row.numero_de_assentos,
