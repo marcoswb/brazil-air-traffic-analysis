@@ -101,6 +101,9 @@ class LoadDataController(BaseController):
                 self.update_progress('--------------------------------------------------------------------')
 
         self.__connection_db.commit()
+        self.update_progress('--------------------------------------------------------------------')
+        self.update_progress('PROCESSO FINALIZADO!')
+        self.update_progress('--------------------------------------------------------------------')
 
     def _save_data(self, object_insert, table, key_search):
         self.__connection_db.add(object_insert)
