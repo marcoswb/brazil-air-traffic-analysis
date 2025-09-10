@@ -96,7 +96,9 @@ class LoadDataController(BaseController):
 
             if i % batch_size == 0:
                 self.__connection_db.commit()
+                self.update_progress('--------------------------------------------------------------------')
                 self.update_progress(f'REGISTROS INSERIDOS: {i}/{total_records}')
+                self.update_progress('--------------------------------------------------------------------')
 
         self.__connection_db.commit()
 
