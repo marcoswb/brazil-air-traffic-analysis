@@ -6,14 +6,14 @@
     "canAdmin": false,
     "canStar": true,
     "canDelete": true,
-    "slug": "voos-por-mes",
-    "url": "/d/eeyeax86ff280d/voos-por-mes",
+    "slug": "aeroportos-mais-movimentados",
+    "url": "/d/beyhw4ja8wb28e/aeroportos-mais-movimentados",
     "expires": "0001-01-01T00:00:00Z",
-    "created": "2025-09-18T00:03:36Z",
-    "updated": "2025-09-19T00:19:13Z",
+    "created": "2025-09-19T00:11:58Z",
+    "updated": "2025-09-22T23:43:15Z",
     "updatedBy": "admin",
     "createdBy": "admin",
-    "version": 6,
+    "version": 9,
     "hasAcl": false,
     "isFolder": false,
     "folderId": 0,
@@ -55,7 +55,7 @@
     "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
-    "id": 3,
+    "id": 4,
     "links": [],
     "panels": [
       {
@@ -102,7 +102,8 @@
                   "value": 80
                 }
               ]
-            }
+            },
+            "unit": "short"
           },
           "overrides": []
         },
@@ -121,11 +122,11 @@
           "legend": {
             "calcs": [],
             "displayMode": "list",
-            "placement": "bottom",
+            "placement": "right",
             "showLegend": true
           },
-          "orientation": "auto",
-          "showValue": "auto",
+          "orientation": "horizontal",
+          "showValue": "never",
           "stacking": "none",
           "tooltip": {
             "mode": "single",
@@ -134,6 +135,7 @@
           "xTickLabelRotation": 0,
           "xTickLabelSpacing": 0
         },
+        "pluginVersion": "10.4.2",
         "targets": [
           {
             "datasource": {
@@ -143,15 +145,10 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT TO_CHAR(DATE_TRUNC('month', scheduled_departure), 'YYYY-MM') AS mes,\r\n       COUNT(*) AS total_voos\r\nFROM etl.flights\r\nWHERE scheduled_departure IS NOT NULL AND \r\n      airline_id = (SELECT id FROM etl.airline WHERE name = '$airline_name')\r\nGROUP BY mes\r\nORDER BY mes;",
+            "rawSql": "SELECT airport.name AS airport_name,\r\n       COUNT(flights.id) AS total_flights\r\nFROM etl.flights\r\nINNER JOIN etl.airport\r\n\tON flights.departure_airport_id = airport.id\r\nWHERE country = 'BRASIL' AND\r\n      ('${state_name:raw}' = 'NULO' OR airport.state = ANY(string_to_array('${state_name:raw}', ','))) AND\r\n      ('${year_flight:raw}' = 'NULO' OR CAST(EXTRACT(YEAR FROM scheduled_departure) AS VARCHAR) = ANY(string_to_array('${year_flight:raw}', ',')))\r\nGROUP BY airport.name\r\nORDER BY 2 DESC\r\nLIMIT 10;",
             "refId": "A",
             "sql": {
-              "columns": [
-                {
-                  "parameters": [],
-                  "type": "function"
-                }
-              ],
+              "columns": [],
               "groupBy": [
                 {
                   "property": {
@@ -161,7 +158,8 @@
                 }
               ],
               "limit": 50
-            }
+            },
+            "table": "aerodromos"
           }
         ],
         "title": "Panel Title",
@@ -174,28 +172,49 @@
     "templating": {
       "list": [
         {
+          "allValue": "NULO",
           "current": {
             "selected": true,
-            "text": "AIR EUROPA LINEAS AEREAS SOCIEDAD ANONIMA",
-            "value": "AIR EUROPA LINEAS AEREAS SOCIEDAD ANONIMA"
+            "text": "SP",
+            "value": "SP"
           },
           "datasource": {
             "type": "grafana-postgresql-datasource",
             "uid": "cexpbiyimhnnkc"
           },
-          "definition": "SELECT name\nFROM etl.airline",
-          "description": "airline name",
+          "definition": "SELECT \"state\"\nFROM etl.airport\nWHERE country = 'BRASIL'\nGROUP BY 1\nORDER BY 1",
           "hide": 0,
-          "includeAll": false,
-          "label": "Nome Aeroporto",
+          "includeAll": true,
+          "label": "Estado",
           "multi": false,
-          "name": "airline_name",
+          "name": "state_name",
           "options": [],
-          "query": "SELECT name\nFROM etl.airline",
+          "query": "SELECT \"state\"\nFROM etl.airport\nWHERE country = 'BRASIL'\nGROUP BY 1\nORDER BY 1",
           "refresh": 1,
           "regex": "",
           "skipUrlSync": false,
-          "sort": 1,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "allValue": "NULO",
+          "current": {
+            "selected": true,
+            "text": "2024",
+            "value": "2024"
+          },
+          "definition": "SELECT DISTINCT EXTRACT(YEAR FROM scheduled_departure)\nFROM etl.flights\nWHERE scheduled_departure IS NOT NULL",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Ano",
+          "multi": false,
+          "name": "year_flight",
+          "options": [],
+          "query": "SELECT DISTINCT EXTRACT(YEAR FROM scheduled_departure)\nFROM etl.flights\nWHERE scheduled_departure IS NOT NULL",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
           "type": "query"
         }
       ]
@@ -206,9 +225,9 @@
     },
     "timepicker": {},
     "timezone": "browser",
-    "title": "Voôs por mês",
-    "uid": "eeyeax86ff280d",
-    "version": 6,
+    "title": "Aeroportos mais movimentados",
+    "uid": "beyhw4ja8wb28e",
+    "version": 9,
     "weekStart": ""
   }
 }
