@@ -1,0 +1,217 @@
+{
+  "meta": {
+    "type": "db",
+    "canSave": true,
+    "canEdit": true,
+    "canAdmin": false,
+    "canStar": true,
+    "canDelete": true,
+    "slug": "pontualidade-voos",
+    "url": "/d/feyw4e1uv9csgc/pontualidade-voos",
+    "expires": "0001-01-01T00:00:00Z",
+    "created": "2025-09-22T23:54:30Z",
+    "updated": "2025-09-23T00:07:38Z",
+    "updatedBy": "admin",
+    "createdBy": "admin",
+    "version": 9,
+    "hasAcl": false,
+    "isFolder": false,
+    "folderId": 0,
+    "folderUid": "",
+    "folderTitle": "General",
+    "folderUrl": "",
+    "provisioned": false,
+    "provisionedExternalId": "",
+    "annotationsPermissions": {
+      "dashboard": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      },
+      "organization": {
+        "canAdd": true,
+        "canEdit": true,
+        "canDelete": true
+      }
+    }
+  },
+  "dashboard": {
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 5,
+    "links": [],
+    "panels": [
+      {
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "cexpbiyimhnnkc"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "percentage",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "orange",
+                  "value": 70
+                },
+                {
+                  "color": "red",
+                  "value": 85
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "id": 2,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "firstNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto"
+        },
+        "pluginVersion": "10.4.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "grafana-postgresql-datasource",
+              "uid": "cexpbiyimhnnkc"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "rawQuery": true,
+            "rawSql": "SELECT airline.name AS airline_name,\r\n       AVG(EXTRACT(EPOCH FROM (flights.actual_departure - flights.scheduled_departure))/60) AS average_delay\r\nFROM etl.flights\r\nINNER JOIN etl.airline\r\n\tON flights.airline_id = airline.id\r\nWHERE flights.actual_departure IS NOT NULL\r\nGROUP BY airline.name\r\nORDER BY 2 DESC;",
+            "refId": "Media geral",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          },
+          {
+            "datasource": {
+              "type": "grafana-postgresql-datasource",
+              "uid": "cexpbiyimhnnkc"
+            },
+            "editorMode": "code",
+            "format": "table",
+            "hide": false,
+            "rawQuery": true,
+            "rawSql": "SELECT airline.name AS airline_name,\r\n       AVG(EXTRACT(EPOCH FROM (flights.actual_departure - flights.scheduled_departure))/60) AS average_delay\r\nFROM etl.flights\r\nINNER JOIN etl.airline\r\n\tON flights.airline_id = airline.id\r\nWHERE flights.actual_departure IS NOT NULL AND\r\n      airline.name = $airline_name\r\nGROUP BY airline.name\r\nORDER BY 2 DESC;",
+            "refId": "Media filtro",
+            "sql": {
+              "columns": [
+                {
+                  "parameters": [],
+                  "type": "function"
+                }
+              ],
+              "groupBy": [
+                {
+                  "property": {
+                    "type": "string"
+                  },
+                  "type": "groupBy"
+                }
+              ],
+              "limit": 50
+            }
+          }
+        ],
+        "title": "Panel Title",
+        "type": "gauge"
+      }
+    ],
+    "schemaVersion": 39,
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "allValue": "NULO",
+          "current": {
+            "selected": true,
+            "text": "AMERICAN AIRLINES, INC.",
+            "value": "AMERICAN AIRLINES, INC."
+          },
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "cexpbiyimhnnkc"
+          },
+          "definition": "SELECT name\nFROM etl.airline",
+          "hide": 0,
+          "includeAll": true,
+          "label": "Nome Compania Aérea",
+          "multi": false,
+          "name": "airline_name",
+          "options": [],
+          "query": "SELECT name\nFROM etl.airline",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "Pontualidade voôs",
+    "uid": "feyw4e1uv9csgc",
+    "version": 9,
+    "weekStart": ""
+  }
+}
