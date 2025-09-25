@@ -10,10 +10,10 @@
     "url": "/d/feyw4e1uv9csgc/pontualidade-voos",
     "expires": "0001-01-01T00:00:00Z",
     "created": "2025-09-22T23:54:30Z",
-    "updated": "2025-09-23T00:07:38Z",
+    "updated": "2025-09-25T16:53:42Z",
     "updatedBy": "admin",
     "createdBy": "admin",
-    "version": 9,
+    "version": 12,
     "hasAcl": false,
     "isFolder": false,
     "folderId": 0,
@@ -118,7 +118,7 @@
             "editorMode": "code",
             "format": "table",
             "rawQuery": true,
-            "rawSql": "SELECT airline.name AS airline_name,\r\n       AVG(EXTRACT(EPOCH FROM (flights.actual_departure - flights.scheduled_departure))/60) AS average_delay\r\nFROM etl.flights\r\nINNER JOIN etl.airline\r\n\tON flights.airline_id = airline.id\r\nWHERE flights.actual_departure IS NOT NULL\r\nGROUP BY airline.name\r\nORDER BY 2 DESC;",
+            "rawSql": "SELECT airline.name AS airline_name,\r\n       AVG(EXTRACT(EPOCH FROM (flights.actual_departure - flights.scheduled_departure))/60) AS \"Média geral de atraso\"\r\nFROM etl.flights\r\nINNER JOIN etl.airline\r\n\tON flights.airline_id = airline.id\r\nWHERE flights.actual_departure IS NOT NULL\r\nGROUP BY airline.name\r\nORDER BY 2 DESC;",
             "refId": "Media geral",
             "sql": {
               "columns": [
@@ -147,7 +147,7 @@
             "format": "table",
             "hide": false,
             "rawQuery": true,
-            "rawSql": "SELECT airline.name AS airline_name,\r\n       AVG(EXTRACT(EPOCH FROM (flights.actual_departure - flights.scheduled_departure))/60) AS average_delay\r\nFROM etl.flights\r\nINNER JOIN etl.airline\r\n\tON flights.airline_id = airline.id\r\nWHERE flights.actual_departure IS NOT NULL AND\r\n      airline.name = $airline_name\r\nGROUP BY airline.name\r\nORDER BY 2 DESC;",
+            "rawSql": "SELECT airline.name AS airline_name,\r\n       AVG(EXTRACT(EPOCH FROM (flights.actual_departure - flights.scheduled_departure))/60) AS \"Média compania atraso\"\r\nFROM etl.flights\r\nINNER JOIN etl.airline\r\n\tON flights.airline_id = airline.id\r\nWHERE flights.actual_departure IS NOT NULL AND\r\n      airline.name = $airline_name\r\nGROUP BY airline.name\r\nORDER BY 2 DESC;",
             "refId": "Media filtro",
             "sql": {
               "columns": [
@@ -168,7 +168,7 @@
             }
           }
         ],
-        "title": "Panel Title",
+        "title": "Pontualidade voôs",
         "type": "gauge"
       }
     ],
@@ -187,14 +187,14 @@
             "type": "grafana-postgresql-datasource",
             "uid": "cexpbiyimhnnkc"
           },
-          "definition": "SELECT name\nFROM etl.airline",
+          "definition": "SELECT name\nFROM etl.airline\norder by 1",
           "hide": 0,
           "includeAll": true,
           "label": "Nome Compania Aérea",
           "multi": false,
           "name": "airline_name",
           "options": [],
-          "query": "SELECT name\nFROM etl.airline",
+          "query": "SELECT name\nFROM etl.airline\norder by 1",
           "refresh": 1,
           "regex": "",
           "skipUrlSync": false,
@@ -211,7 +211,7 @@
     "timezone": "browser",
     "title": "Pontualidade voôs",
     "uid": "feyw4e1uv9csgc",
-    "version": 9,
+    "version": 12,
     "weekStart": ""
   }
 }
