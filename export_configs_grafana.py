@@ -1,9 +1,12 @@
 import os
 import requests
 import json
+import dotenv
+
+dotenv.load_dotenv()
 
 GRAFANA_URL = "http://localhost:3000"
-API_KEY = "glsa_Qt2X7DcNRndtyRLdLNPym8802YD1ij2u_aec0f29c"
+API_KEY = os.getenv('API_GRAFANA')
 EXPORT_DIR = "./grafana"
 
 headers = {
