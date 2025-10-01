@@ -1,4 +1,4 @@
-# *Brazil Air Traffic Analysis* — dados que decolam para virar insights! 🛫🇧🇷  
+# *Brazil Air Traffic Analysis* — dados que decolam para virar insights! 🛫  
 
 [![Python](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/)  
 [![Docker](https://img.shields.io/badge/docker-enabled-2496ED.svg?logo=docker&logoColor=white)](https://www.docker.com/)  
