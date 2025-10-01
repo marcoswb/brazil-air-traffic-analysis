@@ -1,4 +1,4 @@
-# Brazil Air Traffic Analysis 🛫🇧🇷  
+# *Brazil Air Traffic Analysis* — dados que decolam para virar insights! 🛫🇧🇷  
 
 [![Python](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/)  
 [![Docker](https://img.shields.io/badge/docker-enabled-2496ED.svg?logo=docker&logoColor=white)](https://www.docker.com/)  
@@ -6,7 +6,7 @@
 [![Grafana](https://img.shields.io/badge/grafana-dashboard-F46800.svg?logo=grafana&logoColor=white)](https://grafana.com/)  
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)  
 
-Pipeline **ETL** para análise de tráfego aéreo no Brasil, utilizando dados públicos da **[ANAC](https://siros.anac.gov.br)**. Permite explorar métricas de desempenho das companhias aéreas, analisar rotas e visualizar conexões entre aeroportos em dashboards interativos.  
+Pipeline **ETL** para análise de tráfego aéreo no Brasil, utilizando dados públicos da **[ANAC](https://siros.anac.gov.br)**. Permite explorar métricas de desempenho das companhias aéreas, analisar rotas e ter insights com dashboards interativos.  
 
 ---
 
@@ -16,8 +16,7 @@ O projeto constrói um **pipeline de análise de tráfego aéreo brasileiro** qu
 - Extrai dados da ANAC  
 - Transforma e padroniza informações  
 - Carrega em um banco de dados relacional  
-- Disponibiliza os dados em **dashboards do Grafana**  
-- Está preparado para integração futura com dados **meteorológicos**  
+- Disponibiliza os dados em **dashboards do Grafana** 
 
 ---
 
@@ -103,15 +102,25 @@ brazil-air-traffic-analysis/
 
 ## 📊 Exemplos / Resultados  
 
+### Dags Apache Airflow
+<img width="1884" height="551" alt="image" src="https://github.com/user-attachments/assets/c0da1333-8dd9-40e2-a8d2-a65af1fba5b9" />
+
+
 ### Dashboard Grafana - Mapa aeroportos 
 > Pontos em um GeoMap localizando todos os aeroportos que tiveram algum vôo.
+<img width="1579" height="796" alt="image" src="https://github.com/user-attachments/assets/9dbb2a0d-b911-4c3a-9441-8d5176a01e70" />
 
 ### Métricas  
 - Média de atrasos por companhia  
-- Volume de voos por rota  
-- Evolução mensal de passageiros  
+<img width="1589" height="833" alt="image" src="https://github.com/user-attachments/assets/b803b8d2-ade0-4a4d-8d4b-d3e2a907472e" />
 
-(*adicione prints dos dashboards aqui*)  
+- Volume de voos por estado  
+<img width="1589" height="842" alt="image" src="https://github.com/user-attachments/assets/eba651ff-1df9-4ca4-8ea2-073c3ef3fc78" />
+
+- Comparação de voos por companhia aérea  
+<img width="1579" height="794" alt="image" src="https://github.com/user-attachments/assets/cf587926-0e21-4d24-aa89-af1e3c2f0c6c" />
+
+
 
 
 ---
@@ -121,5 +130,3 @@ brazil-air-traffic-analysis/
 Este projeto está licenciado sob a [MIT License](LICENSE).  
 
 ---
-
-✈️ **Brazil Air Traffic Analysis** — dados que decolam para virar insights! 🚀  
